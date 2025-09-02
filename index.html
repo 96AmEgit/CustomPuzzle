@@ -11,6 +11,20 @@
     <div class="controls">
         <label for="image-upload">画像をアップロード</label>
         <input type="file" id="image-upload" accept="image/*">
+        
+        <div class="options">
+            <label for="grid-size-select">ピース数:</label>
+            <select id="grid-size-select">
+                <option value="3">3x3</option>
+                <option value="4" selected>4x4</option>
+                <option value="5">5x5</option>
+                <option value="6">6x6</option>
+            </select>
+            <label>
+                <input type="checkbox" id="assist-checkbox" checked>
+                アシスト機能
+            </label>
+        </div>
     </div>
 
     <div id="main-game-area">
@@ -22,6 +36,10 @@
     </div>
     
     <div id="message"></div>
+    <div id="social-share-container" style="display: none;">
+        <p>パズル完成！</p>
+        <button id="share-twitter">Xで結果を共有</button>
+    </div>
     <button id="reset-button">リセット</button>
     <script src="script.js"></script>
 </body>
