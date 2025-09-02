@@ -40,7 +40,14 @@ h1 {
 }
 
 #puzzle-container {
-    border: 2px solid #ccc;
+    /* widthとheightの固定値を削除 */
+    /* border: 2px solid #ccc; */
+    /* display: grid; */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+    /* background-color: white; */
+    max-width: 80vw; /* 画面幅の最大値を設定 */
+    max-height: 80vh; /* 画面高さの最大値を設定 */
+    margin: auto;
     display: grid;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: white;
@@ -92,4 +99,5 @@ h1 {
 
 #reset-button:hover {
     background-color: #c82333;
+
 }
