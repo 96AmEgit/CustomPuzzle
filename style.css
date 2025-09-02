@@ -33,10 +33,11 @@ h1 {
     background-color: #0056b3;
 }
 
-#game-container {
+#main-game-area {
     display: flex;
     gap: 40px;
     margin-top: 20px;
+    justify-content: center;
 }
 
 #puzzle-container {
@@ -51,11 +52,10 @@ h1 {
 .puzzle-piece {
     border: 1px solid #ddd;
     box-sizing: border-box;
-    cursor: pointer; /* カーソルをポインタに変更 */
+    cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* 選択されたピースのスタイルを追加 */
 .puzzle-piece.selected {
     box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.8);
     transform: scale(1.05);
@@ -95,4 +95,22 @@ h1 {
 
 #reset-button:hover {
     background-color: #c82333;
+}
+
+/* 画面幅が600px以下のデバイス用のスタイル */
+@media (max-width: 600px) {
+    #main-game-area {
+        flex-direction: column; /* 垂直方向に並べる */
+        align-items: center;
+        gap: 20px;
+    }
+
+    #original-image-container {
+        order: 1; /* パズルよりも下に表示する */
+    }
+    
+    #puzzle-container {
+        order: 2; /* パズルを上に表示する */
+        margin-top: 0;
+    }
 }
