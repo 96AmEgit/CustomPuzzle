@@ -1,0 +1,95 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+#image-upload {
+    display: none;
+}
+
+.controls label {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.controls label:hover {
+    background-color: #0056b3;
+}
+
+#game-container {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+#puzzle-container {
+    border: 2px solid #ccc;
+    display: grid;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.puzzle-piece {
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    cursor: grab;
+    transition: transform 0.2s;
+}
+
+.puzzle-piece.dragging {
+    opacity: 0.7;
+    cursor: grabbing;
+}
+
+#original-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#original-image {
+    max-width: 300px;
+    max-height: 300px;
+    border: 2px solid #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#message {
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: green;
+}
+
+#reset-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#reset-button:hover {
+    background-color: #c82333;
+}
