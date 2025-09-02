@@ -14,13 +14,17 @@ h1 {
 
 .controls {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 #image-upload {
     display: none;
 }
 
-.controls label {
+.controls label[for="image-upload"] {
     background-color: #007bff;
     color: white;
     padding: 10px 15px;
@@ -29,8 +33,14 @@ h1 {
     transition: background-color 0.3s;
 }
 
-.controls label:hover {
+.controls label[for="image-upload"]:hover {
     background-color: #0056b3;
+}
+
+.options {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 #main-game-area {
@@ -41,8 +51,8 @@ h1 {
 }
 
 #puzzle-container {
-    max-width: 80vw;
-    max-height: 80vh;
+    max-width: 90vw;
+    max-height: 70vh;
     margin: auto;
     display: grid;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -53,12 +63,16 @@ h1 {
     border: 1px solid #ddd;
     box-sizing: border-box;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, outline 0.2s;
 }
 
 .puzzle-piece.selected {
     box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.8);
     transform: scale(1.05);
+}
+
+.puzzle-piece.correct {
+    outline: 3px solid #00ff00; /* 正しいピースをハイライト */
 }
 
 #original-image-container {
@@ -81,6 +95,26 @@ h1 {
     color: green;
 }
 
+#social-share-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#share-twitter {
+    padding: 8px 15px;
+    background-color: #1DA1F2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#share-twitter:hover {
+    background-color: #0c85d0;
+}
+
 #reset-button {
     margin-top: 20px;
     padding: 10px 20px;
@@ -100,17 +134,17 @@ h1 {
 /* 画面幅が600px以下のデバイス用のスタイル */
 @media (max-width: 600px) {
     #main-game-area {
-        flex-direction: column; /* 垂直方向に並べる */
+        flex-direction: column;
         align-items: center;
         gap: 20px;
     }
 
     #original-image-container {
-        order: 1; /* パズルよりも下に表示する */
+        order: 1;
     }
     
     #puzzle-container {
-        order: 2; /* パズルを上に表示する */
+        order: 2;
         margin-top: 0;
     }
 }
