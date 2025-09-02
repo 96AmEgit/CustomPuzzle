@@ -33,63 +33,70 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function createPuzzle(image) {
-        puzzleContainer.innerHTML = '';
-        messageEl.textContent = '';
-        puzzlePieces = [];
-        firstSelectedPiece = null;
-        
-        const imageWidth = image.naturalWidth;
-        const imageHeight = image.naturalHeight;
+    puzzleContainer.innerHTML = '';
+    messageEl.textContent = '';
+    puzzlePieces = [];
+    firstSelectedPiece = null;
 
-        const gameContainer = document.getElementById('game-container');
-        const containerWidth = gameContainer.clientWidth * 0.4;
-        const containerHeight = gameContainer.clientHeight;
+    // パズルを表示するコンテナの最大サイズを取得
+    // 画面の幅と高さを取得して、パズルの最大サイズを動的に決定します。
+    const maxContainerWidth = document.body.clientWidth * 0.9; // 画面幅の90%
+    const maxContainerHeight = window.innerHeight * 0.7; // 画面高さの70%
 
-        let puzzleWidth, puzzleHeight;
+    // 画像の縦横比に基づいて、パズルのサイズを計算
+    const imageWidth = image.naturalWidth;
+    const imageHeight = image.naturalHeight;
 
-        if (imageWidth > imageHeight) {
-            puzzleWidth = Math.min(imageWidth, containerWidth);
-            puzzleHeight = (imageHeight / imageWidth) * puzzleWidth;
-        } else {
-            puzzleHeight = Math.min(imageHeight, containerHeight);
-            puzzleWidth = (imageWidth / imageHeight) * puzzleHeight;
-        }
+    let puzzleWidth, puzzleHeight;
 
-        puzzleContainer.style.width = `${puzzleWidth}px`;
-        puzzleContainer.style.height = `${puzzleHeight}px`;
-        puzzleContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    // 画像の縦横比を維持しながら、最大サイズに収まるように計算
+    const imageRatio = imageWidth / imageHeight;
+    const maxContainerRatio = maxContainerWidth / maxContainerHeight;
 
-        const pieceSizeX = puzzleWidth / gridSize;
-        const pieceSizeY = puzzleHeight / gridSize;
-        
-        const totalPieces = gridSize * gridSize;
-        
-        // 元の位置情報とシャッフルされた位置情報を保持する配列を作成
-        const initialPositions = [];
-        const shuffledPositions = Array.from({ length: totalPieces }, (_, i) => i);
-        shuffleArray(shuffledPositions);
-
-        for (let i = 0; i < totalPieces; i++) {
-            const piece = document.createElement('div');
-            piece.classList.add('puzzle-piece');
-            piece.dataset.initialIndex = i; // 元々のピースのインデックス
-            
-            // 背景画像の位置を計算し、スタイルを設定
-            const row = Math.floor(shuffledPositions[i] / gridSize);
-            const col = shuffledPositions[i] % gridSize;
-
-            piece.style.width = `${pieceSizeX}px`;
-            piece.style.height = `${pieceSizeY}px`;
-            piece.style.backgroundImage = `url(${image.src})`;
-            piece.style.backgroundSize = `${puzzleWidth}px ${puzzleHeight}px`;
-            piece.style.backgroundPosition = `-${col * pieceSizeX}px -${row * pieceSizeY}px`;
-            
-            puzzlePieces.push(piece);
-            puzzleContainer.appendChild(piece);
-        }
-        
-        addClickListeners();
+    if (imageRatio > maxContainerRatio) {
+        // 画像が横長の場合、幅を基準にサイズを決定
+        puzzleWidth = maxContainerWidth;
+        puzzleHeight = puzzleWidth / imageRatio;
+    } else {
+        // 画像が縦長または正方形の場合、高さを基準にサイズを決定
+        puzzleHeight = maxContainerHeight;
+        puzzleWidth = puzzleHeight * imageRatio;
     }
+    
+    // パズルコンテナのサイズを動的に設定
+    puzzleContainer.style.width = `${puzzleWidth}px`;
+    puzzleContainer.style.height = `${puzzleHeight}px`;
+    puzzleContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+
+    const pieceSizeX = puzzleWidth / gridSize;
+    const pieceSizeY = puzzleHeight / gridSize;
+    
+    // ... (以下の部分は変更なし) ...
+    const totalPieces = gridSize * gridSize;
+    
+    const shuffledPositions = Array.from({ length: totalPieces }, (_, i) => i);
+    shuffleArray(shuffledPositions);
+
+    for (let i = 0; i < totalPieces; i++) {
+        const piece = document.createElement('div');
+        piece.classList.add('puzzle-piece');
+        piece.dataset.initialIndex = i;
+        
+        const row = Math.floor(shuffledPositions[i] / gridSize);
+        const col = shuffledPositions[i] % gridSize;
+
+        piece.style.width = `${pieceSizeX}px`;
+        piece.style.height = `${pieceSizeY}px`;
+        piece.style.backgroundImage = `url(${image.src})`;
+        piece.style.backgroundSize = `${puzzleWidth}px ${puzzleHeight}px`;
+        piece.style.backgroundPosition = `-${col * pieceSizeX}px -${row * pieceSizeY}px`;
+        
+        puzzlePieces.push(piece);
+        puzzleContainer.appendChild(piece);
+    }
+    
+    addClickListeners();
+}
     
     function addClickListeners() {
         puzzlePieces.forEach(piece => {
@@ -151,3 +158,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
