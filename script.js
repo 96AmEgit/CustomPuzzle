@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let originalImage = null;
     let puzzlePieces = [];
-    let firstSelectedPiece = null; // 最初に選択されたピース
+    let firstSelectedPiece = null;
     const gridSize = 4;
 
     imageUpload.addEventListener('change', (e) => {
@@ -63,17 +63,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const pieceSizeY = puzzleHeight / gridSize;
         
         const totalPieces = gridSize * gridSize;
-        const piecePositions = Array.from({ length: totalPieces }, (_, i) => i);
-        shuffleArray(piecePositions);
+        
+        // 元の位置情報とシャッフルされた位置情報を保持する配列を作成
+        const initialPositions = [];
+        const shuffledPositions = Array.from({ length: totalPieces }, (_, i) => i);
+        shuffleArray(shuffledPositions);
 
         for (let i = 0; i < totalPieces; i++) {
             const piece = document.createElement('div');
             piece.classList.add('puzzle-piece');
-            piece.dataset.index = i; // 正解の位置
+            piece.dataset.initialIndex = i; // 元々のピースのインデックス
             
-            const positionIndex = piecePositions[i];
-            const row = Math.floor(positionIndex / gridSize);
-            const col = positionIndex % gridSize;
+            // 背景画像の位置を計算し、スタイルを設定
+            const row = Math.floor(shuffledPositions[i] / gridSize);
+            const col = shuffledPositions[i] % gridSize;
 
             piece.style.width = `${pieceSizeX}px`;
             piece.style.height = `${pieceSizeY}px`;
@@ -92,30 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
         puzzlePieces.forEach(piece => {
             piece.addEventListener('click', () => {
                 if (!firstSelectedPiece) {
-                    // 1つ目のピースを選択
                     firstSelectedPiece = piece;
                     firstSelectedPiece.classList.add('selected');
                 } else if (firstSelectedPiece === piece) {
-                    // 選択済みのピースを再度クリックした場合、選択を解除
                     firstSelectedPiece.classList.remove('selected');
                     firstSelectedPiece = null;
                 } else {
-                    // 2つ目のピースを選択し、入れ替え
                     const secondSelectedPiece = piece;
                     
-                    const firstIndex = Array.from(puzzleContainer.children).indexOf(firstSelectedPiece);
-                    const secondIndex = Array.from(puzzleContainer.children).indexOf(secondSelectedPiece);
-                    
-                    // 入れ替える
-                    puzzleContainer.insertBefore(secondSelectedPiece, firstSelectedPiece);
-                    if (firstIndex < secondIndex) {
-                        puzzleContainer.insertBefore(firstSelectedPiece, secondSelectedPiece.nextSibling);
-                    } else {
-                        puzzleContainer.insertBefore(firstSelectedPiece, secondSelectedPiece);
-                    }
-                    
-                    // puzzlePieces配列も更新
-                    [puzzlePieces[firstIndex], puzzlePieces[secondIndex]] = [puzzlePieces[secondIndex], puzzlePieces[firstIndex]];
+                    // 背景画像の位置を入れ替える
+                    const firstPosition = firstSelectedPiece.style.backgroundPosition;
+                    const secondPosition = secondSelectedPiece.style.backgroundPosition;
+
+                    firstSelectedPiece.style.backgroundPosition = secondPosition;
+                    secondSelectedPiece.style.backgroundPosition = firstPosition;
                     
                     // 選択状態をリセット
                     firstSelectedPiece.classList.remove('selected');
@@ -128,8 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkWin() {
-        const isSolved = puzzlePieces.every((piece, index) => {
-            return piece.dataset.index == index;
+        const isSolved = puzzlePieces.every((piece) => {
+            const initialIndex = piece.dataset.initialIndex;
+            const piecePosition = getBackgroundPositionIndex(piece.style.backgroundPosition, piece.style.width, piece.style.height);
+            return initialIndex == piecePosition;
         });
 
         if (isSolved) {
@@ -137,6 +132,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // 背景画像の位置からピースのインデックスを計算するヘルパー関数
+    function getBackgroundPositionIndex(bgPosition, width, height) {
+        const [x, y] = bgPosition.split(' ').map(val => parseInt(val.replace('px', '')));
+        const pieceSizeX = parseInt(width.replace('px', ''));
+        const pieceSizeY = parseInt(height.replace('px', ''));
+
+        const col = Math.round(Math.abs(x) / pieceSizeX);
+        const row = Math.round(Math.abs(y) / pieceSizeY);
+        
+        return row * gridSize + col;
+    }
+
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
