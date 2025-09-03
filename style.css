@@ -43,6 +43,14 @@ h1 {
     gap: 20px;
 }
 
+#time-container {
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #555;
+    text-align: center;
+}
+
 #main-game-area {
     display: flex;
     gap: 40px;
@@ -72,7 +80,7 @@ h1 {
 }
 
 .puzzle-piece.correct {
-    outline: 3px solid #00ff00; /* 正しいピースをハイライト */
+    outline: 3px solid #00ff00;
 }
 
 #original-image-container {
@@ -131,7 +139,6 @@ h1 {
     background-color: #c82333;
 }
 
-/* 画面幅が600px以下のデバイス用のスタイル */
 @media (max-width: 600px) {
     #main-game-area {
         flex-direction: column;
