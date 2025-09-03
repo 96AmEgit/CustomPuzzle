@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ... (前略：HTML要素の取得はそのまま) ...
     const imageUpload = document.getElementById('image-upload');
     const puzzleContainer = document.getElementById('puzzle-container');
     const originalImageEl = document.getElementById('original-image');
@@ -17,15 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let firstSelectedPiece = null;
     let gridSize = parseInt(gridSizeSelect.value);
     
-    // 変更点1: タイマー関連の変数を修正
     let animationFrameId;
     let startTime;
     let lastTime = 0;
     let elapsedTime = 0;
 
+    // 初期読み込み時にベストタイムをロード
     loadBestTime();
 
-    // イベントリスナーの設定 (変更なし)
     imageUpload.addEventListener('change', handleImageUpload);
     resetButton.addEventListener('click', () => {
         if (originalImage) {
@@ -37,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (originalImage) {
             createPuzzle(originalImage);
         }
+        // ピース数変更時に新しいベストタイムをロード
+        loadBestTime();
     });
     assistCheckbox.addEventListener('change', checkWin);
 
@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
         puzzlePieces = [];
         firstSelectedPiece = null;
         
-        // 変更点2: タイマーのリセットと開始
         resetTimer();
         startTimer();
 
@@ -209,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 変更点3: requestAnimationFrameを使ったタイマー機能 ---
+    // --- requestAnimationFrameを使ったタイマー機能 ---
     function startTimer() {
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
@@ -245,7 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${displayHours}:${displayMinutes}:${displaySeconds}`;
     }
 
+    // --- 変更点：ベストタイム保存機能 ---
     function saveBestTime(time) {
+        // キーにピース数を追加
         const key = `bestTime_${gridSize}`;
         const bestTime = localStorage.getItem(key);
         if (bestTime === null || time < parseInt(bestTime)) {
@@ -255,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadBestTime() {
+        // キーにピース数を追加
         const key = `bestTime_${gridSize}`;
         const bestTime = localStorage.getItem(key);
         if (bestTime) {
